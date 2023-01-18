@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 export const SinglePostPage = ({match}) => {
-    console.log(match);
+    //console.log(match);
     const { postId } = match.params;
 
     const post = useSelector(state => 
@@ -13,7 +13,7 @@ export const SinglePostPage = ({match}) => {
         //If no values satisfy the testing function, undefined is returned.
         state.posts.find(post => post.id === postId)
     )
-    console.log(post);
+    //console.log(post);
 
     if(!post) {
         return(
