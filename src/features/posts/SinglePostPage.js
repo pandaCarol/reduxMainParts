@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { selectPostById } from "./postsSlice";
 
 import { Link } from "react-router-dom";
 
@@ -7,11 +8,10 @@ export const SinglePostPage = ({match}) => {
     //console.log(match);
     const { postId } = match.params;
 
-    const post = useSelector(state => 
+    const post = useSelector(state => selectPostById(state, postId) 
         //.find returns the first element in the provided array 
         //that satisfies the provided testing function. 
         //If no values satisfy the testing function, undefined is returned.
-        state.posts.find(post => post.id === postId)
     )
     //console.log(post);
 
