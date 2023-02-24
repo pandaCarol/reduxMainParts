@@ -4,12 +4,14 @@ import { Link } from "react-router-dom";
 import { PostAuthor } from "./PostAuthor";
 import { TimeAgo } from "./TimeAgo";
 import { ReactionButtons } from "./ReactionButtons";
-import { selectAllPosts, fetchPosts } from "./postsSlice";
+import { selectAllPosts, fetchPosts, selectPostIds, selectPostById } from "./postsSlice";
 import { Spinner } from '../../components/Spinner'
 
-const PostExcerpt = ({ post }) => {
+let PostExcerpt = ({ postId }) => {
+    console.log('run PostExcerpt')
+    const post = useSelector(state => selectPostById(state, postId))
     return (
-        <article className="post-excerpt">
+        <article className="post-excerpt" key={post.id}>
             <h3>{post.title}</h3>
             <div>
                 <PostAuthor userId={post.user} />
@@ -23,13 +25,16 @@ const PostExcerpt = ({ post }) => {
         </article>
     )
 }
+//PostExcerpt = React.memo(PostExcerpt)
 
 export const PostList = () => {
     const dispatch = useDispatch()
+    const orderedPostIds = useSelector(selectPostIds)
 
     //omit component contents
-    const posts = useSelector(selectAllPosts);
-    //console.dir(posts);
+    //const posts = useSelector(selectAllPosts);
+    console.dir(selectPostIds);
+    console.dir(orderedPostIds);
 
     const postStatus = useSelector(state => state.posts.status)
     const error = useSelector(state => state.posts.error)
@@ -44,17 +49,25 @@ export const PostList = () => {
     if (postStatus === 'loading') {
         content = <Spinner text="Loading..." />
     } else if (postStatus === 'succeeded') {
+        content = orderedPostIds.map(postId => (
+            <PostExcerpt key={postId} postId={postId} />
+        ))
+
+        //replace for createEntityAdapter
+        /*
         const orderedPosts = posts
             .slice()
             .sort((a,b) => b.date.localeCompare(a.date))
-        
+
         content = orderedPosts.map(post => (
             <PostExcerpt key={post.id} post={post} />
         ))
+        */
     } else if (postStatus === 'failed') {
         content = <div>{error}</div>
     }
 
+    console.log(content);
     /*
     const orderPosts = posts.slice().sort((a,b) => b.date.localeCompare(a.date))
     const rederedPosts = orderPosts.map(post => {

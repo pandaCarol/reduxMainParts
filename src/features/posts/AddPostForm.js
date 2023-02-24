@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 //import { nanoid } from "@reduxjs/toolkit";
 import { addNewPost } from "./postsSlice";
+import { selectAllUsers } from "../users/usersSlice";
 //import { postAdded } from "./postsSlice";
 
 export const AddPostForm = () => {
@@ -11,7 +12,7 @@ export const AddPostForm = () => {
     const [addRequestStatus, setAddRequestStatus] = useState('idle')
 
     const dispatch = useDispatch()
-    const users = useSelector(state => state.users)
+    const users = useSelector(selectAllUsers)
     //console.log(users)
 
     const onTitleChanged = e => setTitle(pro => e.target.value)
